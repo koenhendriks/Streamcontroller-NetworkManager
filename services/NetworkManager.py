@@ -48,6 +48,38 @@ class NetworkManager:
             return []
 
     @staticmethod
+    def activate_connection(uuid: str) -> bool:
+        try:
+            subprocess.run(
+                ["nmcli", "con", "up", uuid],
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+            )
+            return True
+
+        except subprocess.CalledProcessError as e:
+            logging.error(f"Error executing nmcli to activate connection: {e.stderr}")
+            return False
+
+    @staticmethod
+    def deactivate_connection(uuid: str) -> bool:
+        try:
+            subprocess.run(
+                ["nmcli", "con", "down", uuid],
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+            )
+            return True
+
+        except subprocess.CalledProcessError as e:
+            logging.error(f"Error executing nmcli to deactivate connection: {e.stderr}")
+            return
+
+    @staticmethod
     def is_connected(uuid: str) -> bool:
         try:
             result = subprocess.run(
