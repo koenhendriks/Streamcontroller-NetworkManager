@@ -1,11 +1,13 @@
 # Import StreamController modules
 from GtkHelper.ItemListComboRow import ItemListComboRowListItem, ItemListComboRow
-from data.plugins.NetworkManager.services.NetworkManager import NetworkManager
 from src.backend.PluginManager.ActionBase import ActionBase
 from loguru import logger as log
+from services.NetworkManager import NetworkManager
 
 
 import gi
+
+
 gi.require_version("Adw", "1")
 from gi.repository import Adw
 

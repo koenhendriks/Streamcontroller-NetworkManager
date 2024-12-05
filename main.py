@@ -1,5 +1,5 @@
 # Import StreamController modules
-from data.plugins.NetworkManager.actions.ToggleVpn.ToggleVpn import ToggleVpn
+from actions.ToggleVpn.ToggleVpn import ToggleVpn
 from src.backend.PluginManager.PluginBase import PluginBase
 from src.backend.PluginManager.ActionHolder import ActionHolder
 
