@@ -5,18 +5,14 @@ from src.backend.PluginManager.ActionBase import ActionBase
 from loguru import logger as log
 
 
-# Import python modules
-import os
-
-# Import gtk modules - used for the config rows
 import gi
-gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-from gi.repository import Gtk, Adw
+from gi.repository import Adw
 
 class ToggleVpn(ActionBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.is_active: bool = False
 
     def get_selected_vpn_uuid(self) -> str:
         settings = self.get_settings()
@@ -35,10 +31,15 @@ class ToggleVpn(ActionBase):
         self.update()
 
     def on_key_down(self) -> None:
-        print("Key down")
-    
-    def on_key_up(self) -> None:
-        print("Key up")
+        vpn_uuid = self.get_selected_vpn_uuid()
+        if vpn_uuid == 'no-selection':
+            return
+
+        if self.is_active:
+            NetworkManager.deactivate_connection(vpn_uuid)
+            return
+
+        NetworkManager.activate_connection(vpn_uuid)
 
     def get_config_rows(self) -> "list[Adw.PreferencesRow]":
         vpn_connections = NetworkManager.get_connections('vpn')
@@ -72,8 +73,10 @@ class ToggleVpn(ActionBase):
             return self.handle_no_selection()
 
         if not NetworkManager.is_connected(vpn_uuid):
+            self.is_active = False
             return self.handle_not_connected(vpn_name)
 
+        self.is_active = True
         return self.handle_connected(vpn_name)
 
     def handle_no_selection(self):
