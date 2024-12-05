@@ -1,3 +1,4 @@
+import logging
 import subprocess
 from typing import List, Optional
 
@@ -43,5 +44,27 @@ class NetworkManager:
             return connections
 
         except subprocess.CalledProcessError as e:
-            print(f"Error executing nmcli: {e.stderr}")
+            logging.error(f"Error executing nmcli to retrieve connections: {e.stderr}")
             return []
+
+    @staticmethod
+    def is_connected(uuid: str) -> bool:
+        try:
+            result = subprocess.run(
+                ["nmcli", "-t", "-f", "UUID,STATE", "con", "show", "--active"],
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+            )
+
+            for line in result.stdout.strip().split("\n"):
+                if line:  # Skip empty lines
+                    active_uuid, state = line.split(":")
+                    if active_uuid == uuid and state == "activated":
+                        return True
+            return False
+
+        except subprocess.CalledProcessError as e:
+            logging.error(f"Error executing nmcli to check active connection: {e.stderr}")
+            return False
