@@ -22,6 +22,6 @@ class PluginTemplate(PluginBase):
         self.register(
             plugin_name = "NetworkManager",
             github_repo = "https://github.com/koenhendriks/Streamcontroller-NetworkManager/",
-            plugin_version = "1.0.0",
+            plugin_version = "0.1.0",
             app_version = "1.1.1-alpha"
         )
