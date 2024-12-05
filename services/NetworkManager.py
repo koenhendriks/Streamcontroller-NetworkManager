@@ -18,7 +18,7 @@ class NetworkConnection:
 
 class NetworkManager:
     @staticmethod
-    def get_connections() -> List[NetworkConnection]:
+    def get_connections(conn_type: Optional[str] = None) -> List[NetworkConnection]:
         try:
             result = subprocess.run(
                 ["nmcli", "-t", "-f", "NAME,UUID,TYPE,DEVICE", "con", "show"],
@@ -34,9 +34,12 @@ class NetworkManager:
                 if line:  # Skip empty lines
                     parts = line.split(":")
                     if len(parts) == 4:
-                        name, uuid, conn_type, device = parts
+                        name, uuid, conn_type_parsed, device = parts
                         device = device if device else None  # Handle empty device field
-                        connections.append(NetworkConnection(name, uuid, conn_type, device))
+                        connection = NetworkConnection(name, uuid, conn_type_parsed, device)
+                        # Filter by type if specified
+                        if conn_type is None or conn_type_parsed == conn_type:
+                            connections.append(connection)
             return connections
 
         except subprocess.CalledProcessError as e:
