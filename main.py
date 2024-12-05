@@ -1,22 +1,22 @@
 # Import StreamController modules
+from data.plugins.NetworkManager.actions.ToggleVpn.ToggleVpn import ToggleVpn
 from src.backend.PluginManager.PluginBase import PluginBase
 from src.backend.PluginManager.ActionHolder import ActionHolder
 
 # Import actions
-from .actions.SimpleAction.SimpleAction import SimpleAction
 
 class PluginTemplate(PluginBase):
     def __init__(self):
         super().__init__()
 
         ## Register actions
-        self.simple_action_holder = ActionHolder(
+        self.toggle_vpn_holder = ActionHolder(
             plugin_base = self,
-            action_base = SimpleAction,
-            action_id = "com_koenhendriks_NetworkManager::SimpleAction", # Change this to your own plugin id
-            action_name = "Simple Action",
+            action_base = ToggleVpn,
+            action_id = "com_koenhendriks_NetworkManager::ToggleVpn",
+            action_name = "Toggle VPN",
         )
-        self.add_action_holder(self.simple_action_holder)
+        self.add_action_holder(self.toggle_vpn_holder)
 
         # Register plugin
         self.register(
