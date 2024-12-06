@@ -2,7 +2,7 @@
 from GtkHelper.ItemListComboRow import ItemListComboRowListItem, ItemListComboRow
 from src.backend.PluginManager.ActionBase import ActionBase
 from loguru import logger as log
-from services.NetworkManager import NetworkManager
+from ...services.NetworkManager import NetworkManager
 
 
 import gi
